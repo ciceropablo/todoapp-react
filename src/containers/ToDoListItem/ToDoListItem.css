@@ -1,0 +1,29 @@
+.ToDoListItem {
+  align-items: center;
+  display: flex;
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
+.ToDoListItem:hover {
+  background-color: #f8f8f8;
+}
+
+.ToDoListItem__checkbox {
+  display: block;
+  height: 30px;
+  margin: 0;
+  width: 30px;
+}
+
+.ToDoListItem__label {
+  display: block;
+  margin: 0 10px;
+  overflow: hidden;
+  width: 100%;
+  word-wrap: break-word;
+}
+
+.ToDoListItem__label--strikethrough {
+  text-decoration: line-through;
+}

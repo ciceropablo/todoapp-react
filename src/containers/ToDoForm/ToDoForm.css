@@ -1,0 +1,11 @@
+.ToDoForm {
+  margin: 10px 0;
+  padding: 0 5px;
+}
+
+.ToDoForm__input {
+  box-sizing: border-box;
+  display: block;
+  padding: 10px 5px;
+  width: 100%;
+}
