@@ -1,49 +1,34 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { addToDo } from '../../redux/actions';
 
 import './ToDoForm.css';
 
-class ToDoForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: '' };
+const ToDoForm = () => {
+  const [toDoDescription, setToDoDescription] = useState('');
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+  const dispatch = useDispatch();
 
-  handleChange(e) {
-    const value = e.target.value;
-    this.setState({ value });
-  }
-
-  handleSubmit(e) {
+  const handleSubmit = e => {
     e.preventDefault();
-    this.props.addToDo(this.state.value);
-    this.setState(() => ({ value: '' }));
-  }
+    dispatch(addToDo(toDoDescription));
+    setToDoDescription('');
+  };
 
-  render() {
-    return (
-      <form className="ToDoForm" method="POST" onSubmit={this.handleSubmit}>
-        <input
-          className="ToDoForm__input"
-          type="text"
-          onChange={this.handleChange}
-          value={this.state.value}
-        />
-      </form>
-    );
-  }
-}
+  const handleChange = ({ target }) => {
+    setToDoDescription(target.value);
+  };
 
-ToDoForm.propTypes = {
-  addToDo: PropTypes.func.isRequired
+  return (
+    <form className="ToDoForm" method="POST" onSubmit={handleSubmit}>
+      <input
+        className="ToDoForm__input"
+        type="text"
+        onChange={handleChange}
+        value={toDoDescription}
+      />
+    </form>
+  );
 };
 
-export default connect(
-  null,
-  { addToDo }
-)(ToDoForm);
+export default ToDoForm;

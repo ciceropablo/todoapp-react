@@ -4,7 +4,7 @@ const initialState = {
   toDos: []
 };
 
-function toDos(state = initialState, action) {
+const toDos = (state = initialState, action) => {
   switch (action.type) {
     case ADD_TODO: {
       return Object.assign({}, state, {
@@ -25,7 +25,9 @@ function toDos(state = initialState, action) {
       const checked = action.payload.checked;
 
       const toDo = state.toDos.find(toDo => toDo.id === id);
-      toDo.checked = checked;
+      if (toDo) {
+        toDo.checked = checked;
+      }
 
       return Object.assign({}, state, {
         toDos: [...state.toDos]
@@ -36,6 +38,6 @@ function toDos(state = initialState, action) {
       return state;
     }
   }
-}
+};
 
 export default toDos;

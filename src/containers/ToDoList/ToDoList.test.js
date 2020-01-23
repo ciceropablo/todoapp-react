@@ -1,17 +1,31 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { act } from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
 import store from '../../redux/store';
 
 import ToDoList from './ToDoList';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(
-    <Provider store={store}>
-      <ToDoList />
-    </Provider>,
-    div
-  );
-  ReactDOM.unmountComponentAtNode(div);
+let container;
+
+beforeEach(() => {
+  container = document.createElement('div');
+  document.body.appendChild(container);
+
+  act(() => {
+    render(
+      <Provider store={store}>
+        <ToDoList />
+      </Provider>,
+      container
+    );
+  });
 });
+
+afterEach(() => {
+  unmountComponentAtNode(container);
+  container.remove();
+  container = null;
+});
+
+it('renders without crashing', () => {});

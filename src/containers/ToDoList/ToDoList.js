@@ -1,24 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import ToDoListItem from '../../containers/ToDoListItem/ToDoListItem';
 import './ToDoList.css';
 
-class ToDoList extends React.Component {
-  render() {
-    const toDoItems = this.props.toDos.map(item => {
-      return <ToDoListItem key={item.id} item={item} />;
-    });
+const ToDoList = () => {
+  const toDos = useSelector(({ toDos: { toDos } }) => toDos);
 
-    return toDoItems.length > 0 ? (
-      <ul className="ToDoList">{toDoItems}</ul>
-    ) : null;
-  }
-}
+  const toDoItems = toDos.map(toDo => {
+    return <ToDoListItem key={toDo.id} toDo={toDo} />;
+  });
 
-ToDoList.propTypes = {
-  toDos: PropTypes.array.isRequired
+  return toDoItems.length > 0 ? (
+    <ul className="ToDoList">{toDoItems}</ul>
+  ) : null;
 };
 
-export default connect(state => state.toDos)(ToDoList);
+export default ToDoList;

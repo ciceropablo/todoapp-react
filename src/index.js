@@ -12,9 +12,7 @@ import * as serviceWorker from './serviceWorker';
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <div>
-        <Route exact path="/" component={ToDoApp} />
-      </div>
+      <Route exact path="/" component={ToDoApp} />
     </Router>
   </Provider>,
   document.getElementById('root')
