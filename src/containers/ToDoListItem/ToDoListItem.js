@@ -1,86 +1,63 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { removeToDo, checkToDo } from '../../redux/actions';
+import { useDispatch } from 'react-redux';
 
+import { checkToDo, removeToDo } from '../../redux/actions';
 import { CONFIRMATION } from '../../messages';
 import './ToDoListItem.css';
 
-class ToDoListItem extends React.Component {
-  constructor(props) {
-    super(props);
+const ToDoListItem = ({ toDo: { id, checked, description } }) => {
+  const [inputChecked, toggleInputChecked] = useState(checked);
 
-    const checked = this.props.item.checked;
-    this.state = { checked };
+  const dispatch = useDispatch();
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-  }
+  const handleChange = ({ target: { checked } }) => {
+    toggleInputChecked(checked);
+    dispatch(checkToDo(id, checked));
+  };
 
-  handleChange(e) {
-    const checked = e.target.checked;
-    const id = this.props.item.id;
-    this.setState({ checked });
-    this.props.checkToDo(id, checked);
-  }
-
-  handleClick(e) {
-    e.preventDefault();
+  const handleClick = () => {
     const confirmation = window.confirm(CONFIRMATION);
     if (confirmation) {
-      const id = this.props.item.id;
-      this.props.removeToDo(id);
+      dispatch(removeToDo(id));
     }
-  }
+  };
 
-  getModifierClass(status) {
-    return status ? 'ToDoListItem__label--strikethrough' : '';
-  }
+  return (
+    <li className="ToDoListItem">
+      <input
+        className="ToDoListItem__checkbox"
+        type="checkbox"
+        id={id}
+        onChange={handleChange}
+        checked={inputChecked}
+      />
 
-  render() {
-    const id = this.props.item.id;
-    const checked = this.props.item.checked;
-    const description = this.props.item.description;
+      <label
+        className={`ToDoListItem__label${
+          inputChecked ? ' ToDoListItem__label--strikethrough' : ''
+        }`}
+        htmlFor={id}
+      >
+        {description}
+      </label>
 
-    return (
-      <li className="ToDoListItem">
-        <input
-          className="ToDoListItem__checkbox"
-          type="checkbox"
-          id={id}
-          onChange={this.handleChange}
-          checked={this.state.checked}
-        />
-
-        <label
-          className={`ToDoListItem__label ${this.getModifierClass(checked)}`}
-          htmlFor={id}
-        >
-          {description}
-        </label>
-
-        <button
-          className="ToDoListItem__button ToDoListItem__confirmation-button"
-          onClick={this.handleClick}
-        >
-          &#10005;
-        </button>
-      </li>
-    );
-  }
-}
+      <button
+        className="ToDoListItem__button ToDoListItem__confirmation-button"
+        onClick={handleClick}
+      >
+        &#10005;
+      </button>
+    </li>
+  );
+};
 
 ToDoListItem.propTypes = {
-  item: PropTypes.shape({
+  toDo: PropTypes.shape({
     id: PropTypes.string.isRequired,
     checked: PropTypes.bool.isRequired,
     description: PropTypes.string.isRequired
-  }).isRequired,
-  removeToDo: PropTypes.func.isRequired,
-  checkToDo: PropTypes.func.isRequired
+  }).isRequired
 };
 
-export default connect(
-  null,
-  { removeToDo, checkToDo }
-)(ToDoListItem);
+export default ToDoListItem;
